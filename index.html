@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trắc nghiệm Kinh tế Chính trị Mác - Lênin</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #333333;
+            --success-color: #2ecc71;
+            --error-color: #e74c3c;
+            --border-color: #e0e0e0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .quiz-info {
+            margin-top: 10px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .question-card {
+            background-color: var(--card-bg);
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid var(--border-color);
+            transition: transform 0.2s;
+        }
+
+        .question-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .question-text {
+            font-weight: 600;
+            font-size: 16px;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+        }
+
+        .options-list {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .option-item {
+            padding: 12px 15px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 15px;
+            background-color: #fff;
+        }
+
+        .option-item:hover {
+            background-color: #f1f3f5;
+            border-color: #b1babc;
+        }
+
+        /* Trạng thái khi click đáp án */
+        .option-item.correct {
+            background-color: #d4edda !important;
+            border-color: var(--success-color) !important;
+            color: #155724 !important;
+            font-weight: 600;
+        }
+
+        .option-item.wrong {
+            background-color: #f8d7da !important;
+            border-color: var(--error-color) !important;
+            color: #721c24 !important;
+        }
+
+        .disabled {
+            pointer-events: none;
+        }
+        
+        .blockquote {
+            background: #f1f3f5;
+            border-left: 4px solid var(--primary-color);
+            padding: 10px 15px;
+            margin: 15px 0;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>BÀI TRẮC NGHIỆM KINH TẾ CHÍNH TRỊ</h1>
+        <div class="quiz-info">Tổng số câu hỏi: 100 | Click trực tiếp vào đáp án để kiểm tra kết quả</div>
+    </header>
+
+    <div id="quiz-container"></div>
+</div>
+
+<script>
+    const quizData = [
+        { q: "Thuật ngữ \"kinh tế- chính trị\" được sử dụng lần đầu tiên vào năm nào?", a: ["1610", "1612", "1615", "1618"], r: 2 },
+        { q: "Ai là người đầu tiên đưa ra khái niệm \"kinh tế- chính trị\"?", a: ["Antoine Montchrétien", "Francois Quesnay", "Tomas Mun", "William Petty"], r: 0 },
+        { q: "Ai là người được C. Mác coi là sáng lập ra kinh tế chính trị tư sản cổ điển?", a: ["A. Smith", "D. Ricardo", "W.Petty", "R.T.Mathus"], r: 2 },
+        { q: "Ai là người được coi là nhà kinh tế thời kỳ công trường thủ công?", a: ["W. Petty", "A. Smith", "D.Ricardo", "R.T.Mathus"], r: 1 },
+        { q: "D.Ricardo là nhà kinh tế của thời kỳ nào?", a: ["Thời kỳ tích luỹ nguyên thuỷ TBCN", "Thời kỳ hiệp tác giản đơn", "Thời kỳ công trường thủ công", "Thời kỳ đại công nghiệp cơ khí"], r: 3 },
+        { q: "Kinh tế- chính trị Mác - Lênin đã kế thừa và phát triển trực tiếp những thành tựu của:", a: ["Chủ nghĩa trọng thương", "Chủ nghĩa trọng nông", "Kinh tế chính trị cổ điển Anh", "Kinh tế- chính trị tầm thường"], r: 2 },
+        { q: "Học thuyết kinh tế nào của C.Mác được coi là hòn đá tảng?", a: ["Học thuyết giá trị lao động", "Học thuyết giá trị thặng dư", "Học thuyết tích luỹ tư sản", "Học thuyết tái sản xuất tư bản xã hội"], r: 1 },
+        { q: "Đối tượng nghiên cứu của kinh tế- chính trị Mác-Lênin là:", a: ["Sản xuất của cải vật chất", "Quan hệ xã hội giữa người với người", "Quan hệ sản xuất trong mối quan hệ tác động qua lại với lực lượng sản xuất và kiến trúc thượng tầng.", "Quá trình sản xuất, phân phối, trao đổi, tiêu dùng."], r: 2 },
+        { q: "Hãy chọn phương án đúng về đặc điểm của quy luật kinh tế:", a: ["Mang tính khách quan", "Mang tính chủ quan", "Phát huy tác dụng thông qua hoạt động kinh tế của con người", "Cả a và c"], r: 3 },
+        { q: "Chọn phương án đúng về quy luật kinh tế và chính sách kinh tế:", a: ["Quy luật kinh tế là cơ sở của chính sách kinh tế", "Chính sách kinh tế là hoạt động chủ quan của nhà nước trên cơ sở nhận thức và vận dụng các quy luật khách quan.", "Quy luật kinh tế và chính sách kinh tế đều phụ thuộc vào các điều kiện khách quan.", "Cả a, b, c"], r: 3 },
+        { q: "Để nghiên cứu kinh tế- chính trị Mác- Lênin có thể sử dụng nhiều phương pháp, phương pháp nào quan trọng nhất?", a: ["Trừu tượng hoá khoa học", "Phân tích và tổng hợp", "Mô hình hoá", "Điều tra thống kê"], r: 0 },
+        { q: "Khi nghiên cứu phương thức sản xuất TBCN, C.Mác bắt đầu từ:", a: ["Sản xuất của cải vật chất", "Lưu thông hàng hoá", "Sản xuất giá trị thặng dư", "Sản xuất hàng hoá giản đơn và hàng hoá"], r: 3 },
+        { q: "Trừu tượng hoá khoa học là:", a: ["Gạt bỏ những bộ phận phức tạp của đối tượng nghiên cứu.", "Gạt bỏ các hiện tượng ngẫu nhiên, bề ngoài, chỉ giữ lại những mối liên hệ phổ biến mang tính bản chất.", "Quá trình đi từ cụ thể đến trừu tượng và ngược lại.", "Cả b và c"], r: 3 },
+        { q: "Chức năng nhận thức của kinh tế- chính trị là nhằm:", a: ["Phát hiện bản chất của các hiện tượng và quá trình kinh tế.", "Sự tác động giữa quan hệ sản xuất với lực lượng sản xuất và kiến trúc thượng tầng.", "Tìm ra các quy luật kinh tế", "Cả a, b, c"], r: 3 },
+        { q: "Chức năng phương pháp luận của kinh tế- chính trị Mác- Lênin thể hiện ở:", a: ["Trang bị phương pháp để xem xét thế giới nói chung", "Là nền tảng lý luận cho các khoa học kinh tế ngành", "Là cơ sở lý luận cho các khoa học nằm giáp ranh giữa các tri thức các ngành khác nhau.", "Cả b và c"], r: 3 },
+        { q: "Chức năng tư tưởng của kinh tế- chính trị Mác – Lê nin thể hiện ở:", a: ["Góp phần xây dựng thế giới quan cách mạng của giai cấp công nhân", "Tạo niềm tin vào thắng lợi trong cuộc đấu tranh xoá bỏ áp bức bóc lột", "Là vũ khí tư tưởng của giai cấp công nhân và nhân dân lao động trong công cuộc xây dựng CNXH", "Cả a, b và c"], r: 3 },
+        { q: "Bản chất khoa học và cách mạng của kinh tế - chính trị Mác- Lênin thể hiện ở chức năng nào?", a: ["Nhận thức", "Tư tưởng", "Phương pháp luận", "Cả a, b và c"], r: 3 },
+        { q: "Hoạt động nào của con người được coi là cơ bản nhất và là cơ sở của đời sống xã hội?", a: ["Hoạt động chính trị", "Hoạt động khoa học", "Hoạt động sản xuất của cải vật chất", "Hoạt động nghệ thuật, thể thao"], r: 2 },
+        { q: "Để xem xét, giải thích nguồn gốc sâu xa của các hiện tượng kinh tế- xã hội phải xuất phát từ:", a: ["Từ hệ tư tưởng của giai cấp thống trị", "Từ các hoạt động kinh tế", "Từ truyền thống lịch sử", "Từ ý thức xã hội"], r: 1 },
+        { q: "Quá trình sản xuất là sự kết hợp của các yếu tố:", a: ["Sức lao động với công cụ lao động", "Lao động với tư liệu lao động", "Sức lao động với đối tượng lao động và tư liệu lao động", "Lao động với đối tượng lao động và tư liệu lao động"], r: 2 },
+        { q: "\"Những thời đại kinh tế khác nhau không phải ở chỗ chúng sản xuất ra cái gì, mà là ở chỗ chúng sản xuất bằng cách nào, với những tư liệu lao động nào\". Câu nói trên là của ai?", a: ["A. Smith", "D.Ricardo", "C.Mác", "Ph.Ăng ghen"], r: 2 },
+        { q: "Sức lao động là:", a: ["Toàn bộ thể lực và trí lực trong một con người đang sống và được vận dụng để sản xuất ra giá trị sử dụng nào đó.", "Khả năng lao động, được tiêu dùng trong quá trình sản xuất.", "Hoạt động có mục đích của con người để tạo ra của cải.", "Cả a và b."], r: 3 },
+        { q: "Lao động sản xuất có đặc trưng cơ bản là:", a: ["Hoạt động cơ bản nhất, là phẩm chất đặc biệt của con người", "Là hoạt động có mục đích, có ý thức của con người", "Là sự tiêu dùng sức lao động trong hiện thực", "Cả a, b và c"], r: 3 },
+        { q: "Lao động sản xuất có vai trò gì đối với con người?", a: ["Tạo ra của cải vật chất để nuôi sống con người", "Phát triển, hoàn thiện con người cả về thể lực và trí lực", "Giúp con người tích luỹ kinh nghiệm, chế tạo ra công cụ sản xuất ngày càng tinh vi", "Cả a, b, c."], r: 3 },
+        { q: "Đối tượng lao động là:", a: ["Các vật có trong tự nhiên", "Những vật mà lao động của con người tác động vào nhằm thay đổi nó cho phù hợp với mục đích của con người", "Những vật dùng để truyền dẫn sức lao động của con người", "Cả a, b, c"], r: 1 },
+        { q: "Chọn ý đúng trong các ý dưới đây:", a: ["Mọi nguyên liệu đều là đối tượng lao động", "Mọi đối tượng lao động đều là nguyên liệu", "Nguyên liệu là đối tượng lao động của các ngành công nghiệp chế biến", "Cả a và c đều đúng."], r: 2 },
+        { q: "Tư liệu lao động gồm có:", a: ["Công cụ lao động", "Các vật để chứa đựng, bảo quản", "Kết cấu hạ tầng sản xuất", "Cả a, b, c"], r: 3 },
+        { q: "Trong tư liệu lao động, bộ phận nào quyết định đến năng suất lao động?", a: ["Công cụ lao động", "Nguyên vật liệu cho sản xuất", "Các vật chứa đựng, bảo quản", "Kết cấu hạ tầng sản xuất"], r: 0 },
+        { q: "Bộ phận nào của tư liệu lao động được coi là tiêu chí phản ánh đặc trưng phát triển của một thời đại kinh tế", a: ["Công cụ lao động", "Kết cấu hạ tầng sản xuất", "Nhà cửa, kho bãi ... để chứa đựng, bảo quản", "Cả a và b"], r: 0 },
+        { q: "Chọn ý đúng trong các ý dưới đây:", a: ["Một vật là đối tượng lao động cũng có thể là tư liệu lao động", "Một vật là tư liệu lao động cũng có thể là đối tượng lao động", "Đối tượng lao động và tư liệu lao động kết hợp với nhau là tư liệu sản xuất", "Cả a, b, c đều đúng"], r: 3 },
+        { q: "Trong tư liệu lao động, bộ phận nào cần được phát triển đi trước một bước so với đầu tư sản xuất trực tiếp?", a: ["Công cụ sản xuất", "Các bộ phận chứa đựng, bảo quản", "Kết cấu hạ tầng sản xuất", "Cả a và c"], r: 2 },
+        { q: "Trong nền sản xuất lớn hiện đại, yếu tố nào giữ vai trò quyết định của quá trình lao động sản xuất?", a: ["Sức lao động", "Tư liệu sản xuất hiện đại", "Công cụ sản xuất tiên tiến", "Đối tượng lao động"], r: 0 },
+        { q: "Phương thức sản xuất là sự thống nhất của:", a: ["Tồn tại xã hội và ý thức xã hội", "Cơ sở hạ tầng và kiến trúc thượng tầng", "Lực lượng sản xuất và quan hệ sản xuất", "Cơ cấu kinh tế và kết cấu giai cấp xã hội"], r: 2 },
+        { q: "Lực lượng sản xuất biểu hiện:", a: ["Quan hệ con người với tự nhiên", "Quan hệ con người với con người", "Quan hệ con người với tự nhiên và quan hệ người với người", "Cả a, b, c"], r: 0 },
+        { q: "Trong thời đại ngày nay, lực lượng sản xuất bao gồm các yếu tố nào?", a: ["Người lao động", "Tư liệu sản xuất", "Khoa học công nghệ", "Cả a, b, c"], r: 3 },
+        { q: "Yếu tố chủ thể của lực lượng sản xuất là:", a: ["Tư liệu sản xuất hiện đại", "Con người với kỹ năng, kỹ xảo và tri thức được tích luỹ lại", "Khoa học công nghệ tiên tiến", "Cả b và c"], r: 1 },
+        { q: "Quan hệ sản xuất biểu hiện:", a: ["Quan hệ giữa người với tự nhiên", "Quan hệ kinh tế giữa người với người trong quá trình sản xuất", "Quan hệ giữa người với người trong xã hội", "Cả a, b, c"], r: 1 },
+        { q: "Quan hệ sản xuất bao gồm:", a: ["Quan hệ về sở hữu tư liệu sản xuất", "Quan hệ về tổ chức quản lý sản xuất xã hội", "Quan hệ về phân phối sản phẩm xã hội", "Cả a, b, c"], r: 3 },
+        { q: "Quan hệ nào giữ vai trò quyết định trong quan hệ sản xuất:", a: ["Quan hệ sở hữu", "Quan hệ tổ chức quản lý", "Quan hệ phân phối", "Không quan hệ nào quyết định"], r: 0 },
+        { q: "Quan hệ sản xuất được hình thành do:", a: ["ý muốn chủ quan của con người", "Do giai cấp thống trị quy định thành pháp luật", "Do tính chất và trình độ phát triển của lực lượng sản xuất", "Cả a, b, c"], r: 2 },
+        { q: "Lực lượng sản xuất và quan hệ sản xuất có quan hệ với nhau thế nào?", a: ["Tác động qua lại với nhau", "Lực lượng sản xuất quyết định quan hệ sản xuất", "QHSX có tác động tích cực trở lại đối với lực lượng sản xuất", "Cả a, b và c"], r: 3 },
+        { q: "Khi nào QHSX được xem là phù hợp với tính chất và trình độ phát triển của lực lượng sản xuất?", a: ["Thúc đẩy lực lượng sản xuất phát triển", "Cải thiện đời sống nhân dân", "Tạo điều kiện thực hiện công bằng xã hội", "Cả a, b, c"], r: 3 },
+        { q: "Các phương thức sản xuất nối tiếp nhau trong lịch sử theo trình tự nào?", a: ["Cộng sản nguyên thuỷ- phong kiến- chiếm hữu nô lệ- tư bản – chủ nghĩa cộng sản", "Cộng sản nguyên thuỷ- chiếm hữu nô lệ- phong kiến- tư bản- chủ nghĩa cộng sản", "Chiếm hữu nô lệ - cộng sản nguyên thuỷ - phong kiến - tư bản - chủ nghĩa cộng sản", "Cộng sản nguyên thuỷ - chiếm hữu nô lệ - tư bản - phong kiến - chủ nghĩa cộng sản"], r: 1 },
+        { q: "Tái sản xuất là:", a: ["Là quá trình sản xuất", "Là quá trình sản xuất được lặp đi lặp lại và phục hồi không ngừng.", "Là sự khôi phục lại sản xuất", "Cả a, b, c"], r: 1 },
+        { q: "Căn cứ vào đâu để phân chia thành tái sản xuất cá biệt và tái sản xuất xã hội?", a: ["Căn cứ vào phạm vi sản xuất", "Căn cứ vào tốc độ sản xuất", "Căn cứ vào tính chất sản xuất", "Căn cứ vào nội dung sản xuất"], r: 0 },
+        { q: "Căn cứ vào đâu để chia ra thành tái sản xuất giản đơn và tái sản xuất mở rộng?", a: ["Căn cứ vào phạm vi", "Căn cứ vào nội dung", "Căn cứ vào tính chất", "Căn cứ vào quy mô"], r: 3 },
+        { q: "Loại tái sản xuất nào làm tăng sản phẩm chủ yếu do tăng năng suất lao động và hiệu quả sử dụng các nguồn lực?", a: ["Tái sản xuất giản đơn", "Tái sản xuất mở rộng", "Tái sản xuất mở rộng theo chiều rộng", "Tái sản xuất mở rộng theo chiều sâu"], r: 3 },
+        { q: "Chọn ý sai về tái sản xuất giản đơn và tái sản xuất mở rộng?", a: ["Tái sản xuất giản đơn là đặc trưng của nền sản xuất nhỏ", "Tái sản xuất giản đơn là việc tổ chức sản xuất đơn giản, không phức tạp", "Tái sản xuất mở rộng là đặc trưng của nền sản xuất lớn", "Sản phẩm thặng dư là nguồn gốc của tái sản xuất mở rộng"], r: 1 },
+        { q: "Chọn ý sai về tái sản xuất mở rộng theo chiều rộng và tái sản xuất mở rộng theo chiều sâu?", a: ["Đều làm cho sản phẩm tăng lên", "Cả hai hình thức tái sản xuất đều dựa trên cơ sở tăng năng suất lao động và hiệu quả sử dụng các yếu tố đầu vào", "Tái sản xuất mở rộng theo chiều sâu sử dụng tài nguyên hiệu quả hơn và gây ra ô nhiễm ít hơn tái sản xuất mở rộng theo chiều rộng.", "Cả b và c"], r: 1 },
+        { q: "Xác định đúng trình tự các khâu của quá trình tái sản xuất", a: ["Sản xuất - trao đổi - phân phối - tiêu dùng", "Sản xuất - phân phối - trao đổi - tiêu dùng", "Phân phối - trao đổi - sản xuất - tiêu dùng", "Trao đổi - tiêu dùng - phân phối - sản xuất"], r: 1 },
+        { q: "Trong 4 khâu của quá trình tái sản xuất, khâu nào giữ vai trò quyết định?", a: ["Sản xuất", "Phân phối", "Trao đổi", "Tiêu dùng"], r: 0 },
+        { q: "Trong các khâu của quá trình tái sản xuất, khâu nào là mục đích và là động lực?", a: ["Sản xuất", "Phân phối", "Trao đổi", "Tiêu dùng"], r: 3 },
+        { q: "Chọn ý đúng về quan hệ giữa sản xuất với phân phối", a: ["Tồn tại độc lập với nhau", "Phân phối thụ động, do sản xuất quyết định", "Phân phối quyết định đến quy mô, cơ cấu của sản xuất", "Sản xuất quyết định phân phối, phân phối có tác động tích cực đối với sản xuất."], r: 3 },
+        { q: "Nội dung của tái sản xuất xã hội bao gồm:", a: ["Tái sản xuất của cải vật chất và QHSX", "Tái sản xuất sức lao động và tư liệu sản xuất", "Tái sản xuất tư liệu tiêu dùng và môi trường sinh thái", "Tái sản xuất sức lao động, của cải vật chất, QHSX và môi trường sinh thái"], r: 3 },
+        { q: "Tiêu chí nào là quan trọng nhất để phân biệt các hình thái kinh tế - xã hội?", a: ["Lực lượng sản xuất", "Quan hệ sản xuất", "Tồn tại xã hội", "Kiến trúc thượng tầng"], r: 1 },
+        { q: "Tăng trưởng kinh tế là:", a: ["Tăng năng suất lao động", "Tăng hiệu quả của sản xuất", "Tăng quy mô sản lượng của nền kinh tế trong một thời kỳ nhất định", "Sự phát triển kinh tế và tiến bộ xã hội"], r: 2 },
+        { q: "Chỉ số nào được sử dụng để tính tốc độ tăng trưởng kinh tế?", a: ["Mức tăng năng suất lao động", "Mức tăng vốn đầu tư", "Mức tăng GDP/người", "Mức tăng GNP hoặc GDP năm sau so với năm trước"], r: 3 },
+        { q: "Để tăng trưởng kinh tế cao, kinh tế học hiện đại nêu ra các nhân tố nào?", a: ["Vốn, khoa học công nghệ và con người", "Đất đai, tư bản và cơ cấu kinh tế", "Cơ cấu kinh tế, thể chế chính trị và vai trò của nhà nước", "Cả a và c"], r: 0 },
+        { q: "Chọn ý đúng về phát triển kinh tế", a: ["Phát triển kinh tế là tăng trưởng kinh tế bền vững", "Phát triển kinh tế là tăng trưởng kinh tế, hoàn thiện cơ cấu kinh tế và thể chế kinh tế.", "Phát triển kinh tế là tăng trưởng kinh tế và nâng cao chất lượng cuộc sống", "Phát triển kinh tế là tăng trưởng kinh tế gắn liền với hoàn thiện cơ cấu kinh tế, thể chế kinh tế và nâng cao chất lượng cuộc sống."], r: 3 },
+        { q: "Thế nào là tăng trưởng kinh tế bền vững?", a: ["Là sự tăng trưởng ổn định lâu dài và tốc độ rất cao", "Là sự tăng trưởng tương đối cao, ổn định trong thời gian tương đối dài", "Sự tăng trưởng gắn liền với bảo vệ môi trường sinh thái và tiến bộ xã hội", "Cả b và c"], r: 2 },
+        { q: "Trong các nhân tố tăng trưởng kinh tế, Đảng ta xác định nhân tố nào là cơ bản của tăng trưởng nhanh và bền vững?", a: ["Vốn", "Con người", "Khoa học và công nghệ", "Cơ cấu kinh tế, thể chế kinh tế và vai trò nhà nước"], r: 1 },
+        { q: "Tăng trưởng kinh tế có vai trò thế nào?", a: ["Là điều kiện để khắc phục tình trạng đói nghèo, lạc hậu", "Để tạo thêm việc làm, giảm thất nghiệp", "Để củng cố an ninh, quốc phòng", "Cả a, b và c"], r: 3 },
+        { q: "Các nhân tố nào có ảnh hưởng đến phát triển kinh tế?", a: ["Lực lượng sản xuất", "Quan hệ sản xuất", "Kiến trúc thượng tầng", "Cả a, b, c"], r: 3 },
+        { q: "Phát triển kinh tế bao gồm những nội dung nào dưới đây?", a: ["Sự gia tăng của GNP, hoặc GDP và GNP hoặc GDP trên đầu người.", "Cơ cấu kinh tế thay đổi theo hướng: tỷ trọng của công nghiệp và dịch vụ trong GNP tăng lên còn của nông nghiệp trong GNP giảm xuống.", "Chất lượng cuộc sống của đại đa số dân cư tăng lên cả về mặt vật chất, tinh thần và môi trường sinh thái được bảo vệ.", "Cả a, b, c"], r: 3 },
+        { q: "Tiến bộ xã hội được thể hiện ở những mặt nào?", a: ["Tiến bộ về kinh tế", "Tiến bộ về chính trị, xã hội", "Đời sống văn hoá, tinh thần ngày càng được nâng cao", "Cả a, b, c đều đúng"], r: 3 },
+        { q: "Liên hợp quốc dùng chỉ số HDI làm tiêu chí đánh giá sự phát triển, sự tiến bộ của mỗi quốc gia. Chỉ số HDI gồm những tiêu chí cơ bản nào?", a: ["Mức thu nhập bình quân (GDP/người)", "Thành tựu giáo dục", "Tuổi thọ bình quân", "Cả a, b và c"], r: 3 },
+        { q: "Phát triển kinh tế và tiến bộ xã hội có quan hệ với nhau:", a: ["Phát triển kinh tế là cơ sở vật chất cho tiến bộ xã hội", "Tiến bộ xã hội thúc đẩy tăng trưởng và phát triển kinh tế", "Thực chất là quan hệ giữa sự phát triển lực lượng sản xuất với phát triển QHSX và kiến trúc thượng tầng", "Cả a, b và c"], r: 3 },
+        { q: "Chọn ý đúng về tăng trưởng kinh tế và phát triển kinh tế", a: ["Muốn phát triển kinh tế thì cần phải tăng trưởng kinh tế", "Có thể có tăng trưởng kinh tế nhưng không có phát triển kinh tế", "Những nhân tố làm tăng trưởng kinh tế đều làm phát triển kinh tế", "Cả a, b, c đều đúng"], r: 3 },
+        { q: "Chọn các nội dung đúng về xã hội hoá sản xuất. Xã hội hoá sản xuất bao gồm:", a: ["Xã hội hoá sản xuất về kinh tế- kỹ thuật", "Xã hội hoá sản xuất về kinh tế - tổ chức", "Xã hội hoá sản xuất về kinh tế - xã hội", "Cả a, b, c"], r: 3 },
+        { q: "Sản xuất hàng hoá xuất hiện dựa trên:", a: ["Phân công lao động cá biệt và chế độ tư hữu về tư liệu sản xuất", "Phân công lao động chung và chế độ sở hữu khác nhau về TLSX", "Phân công lao động và sự tách biệt về kinh tế giữa những người sản xuất", "Phân công lao động xã hội và chế độ tư hữu hoặc những hình thức sở hữu khác nhau về TLSX"], r: 3 },
+        { q: "Hàng hoá là:", a: ["Sản phẩm của lao động để thoả mãn nhu cầu của con người", "Sản phẩm của lao động có thể thoả mãn nhu cầu nào đó của con người thông qua mua bán", "Sản phẩm ở trên thị trường", "Sản phẩm được sản xuất ra để đem bán"], r: 1 },
+        { q: "Giá trị của hàng hoá được quyết định bởi:", a: ["Sự khan hiếm của hàng hoá", "Sự hao phí sức lao động của con người", "Lao động trừu tượng của người sản xuất kết tinh trong hàng hoá", "Công dụng của hàng hoá"], r: 2 },
+        { q: "Quy luật giá trị có tác dụng:", a: ["Điều tiết sản xuất và lưu thông hàng hoá", "Cải tiến kỹ thuật, tăng năng suất lao động và phân hoá những người sản xuất", "Điều tiết sản xuất, phân hoá giàu nghèo", "Cả a và b"], r: 3 },
+        { q: "Sản xuất hàng hoá tồn tại:", a: ["Trong mọi xã hội", "Trong chế độ nô lệ, phong kiến, TBCN", "Trong các xã hội, có phân công lao động xã hội và sự tách biệt về kinh tế giữa những người sản xuất", "Chỉ có trong CNTB"], r: 2 },
+        { q: "Giá cả hàng hoá là:", a: ["Giá trị của hàng hoá", "Quan hệ về lượng giữa hàng và tiền", "Tổng của chi phí sản xuất và lợi nhuận", "Biểu hiện bằng tiền của giá trị hàng hoá"], r: 3 },
+        { q: "Quy luật giá trị là:", a: ["Quy luật riêng của CNTB", "Quy luật cơ bản của sản xuất và trao đổi hàng hoá", "Quy luật kinh tế chung của mọi xã hội", "Quy luật kinh tế của thời kỳ quá độ lên CNXH"], r: 1 },
+        { q: "Yếu tố quyết định đến giá cả hàng hoá là:", a: ["Giá trị của hàng hoá", "Quan hệ cung cầu về hàng hoá", "Giá trị sử dụng của hàng hoá", "Mốt thời trang của hàng hoá"], r: 0 },
+        { q: "Lao động trừu tượng là:", a: ["Là phạm trù riêng của CNTB", "Là phạm trù của mọi nền kinh tế hàng hoá", "Là phạm trù riêng của kinh tế thị trường", "Là phạm trù chung của mọi nền kinh tế"], r: 1 },
+        { q: "Lao động cụ thể là:", a: ["Là phạm trù lịch sử", "Lao động tạo ra giá trị của hàng hoá", "Tạo ra giá trị sử dụng của hàng hoá", "Biểu hiện tính chất xã hội của người sản xuất hàng hoá"], r: 2 },
+        { q: "Lượng giá trị xã hội của hàng hoá được quyết định bởi:", a: ["Hao phí vật tư kỹ thuật", "Hao phí lao động cần thiết của người sản xuất hàng hoá", "Hao phí lao động sống của người sản xuất hàng hoá", "Thời gian lao động xã hội cần thiết"], r: 3 },
+        { q: "Lượng giá trị của đơn vị hàng hoá thay đổi:", a: ["Tỷ lệ thuận với năng suất lao động", "Tỷ lệ nghịch với cường độ lao động", "Tỷ lệ nghịch với năng suất lao động, không phụ thuộc vào cường độ lao động", "a và b"], r: 2 },
+        { q: "Lượng giá trị của đơn vị hàng hoá thay đổi:", a: ["Tỷ lệ nghịch với thời gian lao động xã hội cần thiết và năng suất lao động", "Tỷ lệ thuận với thời gian lao động xã hội cần thiết", "Tỷ lệ nghịch với năng suất lao động", "Cả b và c"], r: 3 },
+        { q: "Lượng giá trị của đơn vị hàng hoá:", a: ["Tỷ lệ thuận với cường độ lao động", "Tỷ lệ nghịch với cường độ lao động", "Không phụ thuộc vào cường độ lao động", "Cả a, b và c"], r: 2 },
+        { q: "Chọn ý đúng về tăng năng suất lao động: Khi tăng năng suất lao động thì:", a: ["Số lượng hàng hoá làm ra trong 1 đơn vị thời gian tăng", "Tổng giá trị của hàng hoá không thay đổi", "Giá trị 1 đơn vị hàng hoá giảm xuống", "Cả a, b và c"], r: 3 },
+        { q: "Chọn ý đúng về tăng cường độ lao động: khi cường độ lao động tăng lên thì:", a: ["Số lượng hàng hoá làm ra trong một đơn vị thời gian tăng lên", "Số lượng lao động hao phí trong thời gian đó không thay đổi", "Giá trị 1 đơn vị hàng hoá giảm đi", "Cả a, b và c"], r: 0 },
+        { q: "Khi đồng thời tăng năng suất lao động và cường độ lao động lên 2 lần thì ý nào dưới đây là đúng?", a: ["Tổng số hàng hoá tăng lên 4 lần, tổng số giá trị hàng hoá tăng lên 4 lần", "Tổng số giá trị hàng hoá tăng 2 lần, tổng số hàng hoá tăng 2 lần", "Giá trị 1 hàng hoá giảm 2 lần, tổng số giá trị hàng hoá tăng 2 lần", "Tổng số hàng hoá tăng lên 2 lần, giá trị 1 hàng hoá giảm 2 lần."], r: 0 },
+        { q: "Hai hàng hoá trao đổi được với nhau vì:", a: ["Chúng cùng là sản phẩm của lao động", "Có lượng thời gian hao phí lao động xã hội cần thiết để sản xuất ra chúng bằng nhau", "Có lượng hao phí vật tư kỹ thuật bằng nhau", "Cả a và b"], r: 3 },
+        { q: "Giá trị sử dụng là gì?", a: ["Là công dụng của vật có thể thoả mãn nhu cầu nào đó của con người", "Là tính hữu ích của vật", "Là thuộc tính tự nhiên của vật", "Cả a, b và c"], r: 3 },
+        { q: "Số lượng giá trị sử dụng phụ thuộc các nhân tố nào?", a: ["Những điều kiện tự nhiên", "Trình độ khoa học công nghệ", "Chuyên môn hoá sản xuất", "Cả a, b và c"], r: 3 },
+        { q: "Yếu tố nào được xác định là thực thể của giá trị hàng hoá?", a: ["Lao động cụ thể", "Lao động trừu tượng", "Lao động giản đơn", "Lao động phức tạp"], r: 1 },
+        { q: "Giá trị hàng hoá được tạo ra từ đâu?", a: ["Từ sản xuất", "Từ phân phối", "Từ trao đổi", "Cả sản xuất, phân phối và trao đổi"], r: 0 },
+        { q: "Tính chất hai mặt của lao động sản xuất hàng hoá là:", a: ["Lao động tư nhân và lao động xã hội", "Lao động giản đơn và lao động phức tạp", "Lao động cụ thể và lao động trừu tượng", "Lao động quá khứ và lao động sống"], r: 2 },
+        { q: "Ai là người phát hiện ra tính chất hai mặt của lao động sản xuất hàng hoá?", a: ["A.Smith", "D.Ricardo", "C.Mác", "Ph. Ăng ghen"], r: 2 },
+        { q: "Lao động cụ thể là:", a: ["Là những việc làm cụ thể", "Là lao động có mục đích cụ thể", "Là lao động ở các ngành nghề cụ thể", "Là lao động ngành nghề, có mục đích riêng, đối tượng riêng, công cụ lao động riêng và kết quả riêng"], r: 3 },
+        { q: "Lao động cụ thể là:", a: ["Nguồn gốc của của cải", "Nguồn gốc của giá trị", "Nguồn gốc của giá trị trao đổi", "Cả a, b và c"], r: 0 },
+        { q: "\"Lao động là cha, còn đất là mẹ của mọi của cải\". Câu nói này là của ai?", a: ["W.Petty", "A.Smith", "D. Ricardo", "C.Mác"], r: 0 },
+        { q: "\"Lao động là cha, còn đất là mẹ của mọi của cải\". Khái niệm lao động trong câu này là lao động gì?", a: ["Lao động giản đơn", "Lao động phức tạp", "Lao động cụ thể", "Lao động trừu tượng"], r: 2 },
+        { q: "Lao động trừu tượng là gì?", a: ["Là lao động không cụ thể", "Là lao động phức tạp", "Là lao động có trình độ cao, mất nhiều công đào tạo", "Là sự hao phí sức lao động của người sản xuất hàng hoá nói chung không tính đến những hình thức cụ thể."], r: 3 },
+        { q: "Lao động trừu tượng là nguồn gốc:", a: ["Của tính hữu ích của hàng hoá", "Của giá trị hàng hoá", "Của giá trị sử dụng", "Cả a, b, c"], r: 1 },
+        { q: "Thế nào là lao động giản đơn?", a: ["Là lao động làm công việc đơn giản", "Là lao động làm ra các hàng hoá chất lượng không cao", "Là lao động chỉ làm một công đoạn của quá trình tạo ra hàng hoá.", "Là lao động không cần qua đào tạo, huấn luyện cũng có thể làm được."], r: 3 }
+    ];
+
+    const container = document.getElementById('quiz-container');
+
+    quizData.forEach((item, qIdx) => {
+        const card = document.createElement('div');
+        card.className = 'question-card';
+
+        const qText = document.createElement('div');
+        qText.className = 'question-text';
+        qText.innerText = `Câu ${qIdx + 1}: ${item.q}`;
+        card.appendChild(qText);
+
+        const uList = document.createElement('ul');
+        uList.className = 'options-list';
+
+        const labels = ['A', 'B', 'C', 'D'];
+        item.a.forEach((ans, aIdx) => {
+            const li = document.createElement('li');
+            li.className = 'option-item';
+            li.innerText = `${labels[aIdx]}. ${ans}`;
+            
+            li.addEventListener('click', () => {
+                const siblings = uList.querySelectorAll('.option-item');
+                siblings.forEach(el => el.classList.add('disabled'));
+
+                if (aIdx === item.r) {
+                    li.classList.add('correct');
+                } else {
+                    li.classList.add('wrong');
+                    siblings[item.r].classList.add('correct');
+                }
+            });
+
+            uList.appendChild(li);
+        });
+
+        card.appendChild(uList);
+        container.appendChild(card);
+    });
+</script>
+
+</body>
+</html>
