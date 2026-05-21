@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trắc nghiệm Kinh tế Chính trị Mác - Lênin</title>
+    <title>Trắc nghiệm Kinh tế Chính trị Mác - Lênin (Ngẫu nhiên)</title>
     <style>
         :root {
             --primary-color: #2c3e50;
@@ -33,7 +33,7 @@
             text-align: center;
             margin-bottom: 40px;
             padding: 20px;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            background: linear-gradient(135deg, #e67e22, #d35400);
             color: white;
             border-radius: 12px;
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
@@ -83,7 +83,7 @@
             border: 1px solid var(--border-color);
             border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
             font-size: 15px;
             background-color: #fff;
         }
@@ -93,30 +93,20 @@
             border-color: #b1babc;
         }
 
-        /* Trạng thái khi click đáp án */
+        /* Các trạng thái màu sắc khi click */
         .option-item.correct {
             background-color: #d4edda !important;
             border-color: var(--success-color) !important;
             color: #155724 !important;
             font-weight: 600;
+            pointer-events: none; /* Đúng rồi thì khóa câu này lại */
         }
 
         .option-item.wrong {
             background-color: #f8d7da !important;
             border-color: var(--error-color) !important;
             color: #721c24 !important;
-        }
-
-        .disabled {
-            pointer-events: none;
-        }
-        
-        .blockquote {
-            background: #f1f3f5;
-            border-left: 4px solid var(--primary-color);
-            padding: 10px 15px;
-            margin: 15px 0;
-            font-style: italic;
+            pointer-events: none; /* Sai rồi thì không cho bấm lại chính nút sai này nữa */
         }
     </style>
 </head>
@@ -124,15 +114,16 @@
 
 <div class="container">
     <header>
-        <h1>BÀI TRẮC NGHIỆM KINH TẾ CHÍNH TRỊ</h1>
-        <div class="quiz-info">Tổng số câu hỏi: 100 | Click trực tiếp vào đáp án để kiểm tra kết quả</div>
+        <h1>TRẮC NGHIỆM KINH TẾ CHÍNH TRỊ (100 CÂU)</h1>
+        <div class="quiz-info">🔄 Câu hỏi tự động đảo ngẫu nhiên khi tải lại trang | 🎯 Bạn có thể chọn lại đáp án cho đến khi đúng!</div>
     </header>
 
     <div id="quiz-container"></div>
 </div>
 
 <script>
-    const quizData = [
+    // Dữ liệu gốc 100 câu hỏi
+    const originalQuizData = [
         { q: "Thuật ngữ \"kinh tế- chính trị\" được sử dụng lần đầu tiên vào năm nào?", a: ["1610", "1612", "1615", "1618"], r: 2 },
         { q: "Ai là người đầu tiên đưa ra khái niệm \"kinh tế- chính trị\"?", a: ["Antoine Montchrétien", "Francois Quesnay", "Tomas Mun", "William Petty"], r: 0 },
         { q: "Ai là người được C. Mác coi là sáng lập ra kinh tế chính trị tư sản cổ điển?", a: ["A. Smith", "D. Ricardo", "W.Petty", "R.T.Mathus"], r: 2 },
@@ -235,6 +226,18 @@
         { q: "Thế nào là lao động giản đơn?", a: ["Là lao động làm công việc đơn giản", "Là lao động làm ra các hàng hoá chất lượng không cao", "Là lao động chỉ làm một công đoạn của quá trình tạo ra hàng hoá.", "Là lao động không cần qua đào tạo, huấn luyện cũng có thể làm được."], r: 3 }
     ];
 
+    // Thuật toán đảo ngẫu nhiên mảng câu hỏi (Fisher-Yates)
+    const shuffleArray = (array) => {
+        for (let i = array.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [array[i], array[j]] = [array[j], array[i]];
+        }
+        return array;
+    };
+
+    // Tạo một bản sao và đảo ngẫu nhiên
+    const quizData = shuffleArray([...originalQuizData]);
+
     const container = document.getElementById('quiz-container');
 
     quizData.forEach((item, qIdx) => {
@@ -256,14 +259,17 @@
             li.innerText = `${labels[aIdx]}. ${ans}`;
             
             li.addEventListener('click', () => {
-                const siblings = uList.querySelectorAll('.option-item');
-                siblings.forEach(el => el.classList.add('disabled'));
-
                 if (aIdx === item.r) {
+                    // Nếu đúng: Tìm tất cả đáp án trong câu này, xóa màu đỏ cũ (nếu có) và tô xanh đáp án đúng
+                    const siblings = uList.querySelectorAll('.option-item');
+                    siblings.forEach(el => {
+                        el.classList.remove('wrong');
+                        el.classList.add('disabled'); // Khóa câu này lại sau khi đã tìm ra đáp án đúng
+                    });
                     li.classList.add('correct');
                 } else {
+                    // Nếu sai: Chỉ biến nút vừa bấm thành màu đỏ, người dùng vẫn có thể bấm nút khác
                     li.classList.add('wrong');
-                    siblings[item.r].classList.add('correct');
                 }
             });
 
